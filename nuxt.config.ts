@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/image'],
   css: ['../app.css'],
+  plugins: ['~/plugins/gsap.js'],
   postcss: {
     plugins: {
       tailwindcss: {},

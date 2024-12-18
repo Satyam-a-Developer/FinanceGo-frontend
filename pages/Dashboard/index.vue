@@ -19,10 +19,10 @@ onMounted(() => {
   if ($gsap && $ScrollTrigger) {
     $gsap.to(box.value, {
       scrollTrigger: {
-        trigger: box.value, // Element to trigger the animation
-        start: 'top 80%', // When the top of the element hits 80% of the viewport
-        end: 'top 20%', // When the top of the element hits 20% of the viewport
-        scrub: true, // Smoothly animate on scroll
+        trigger: box.value, 
+        start: 'top 80%',
+        end: 'top 20%', 
+        scrub: true, 
       },
       x: 300,
       rotation: 360,

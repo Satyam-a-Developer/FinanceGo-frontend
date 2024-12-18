@@ -47,8 +47,8 @@
     </div>
 
     <!-- Features Section -->
-    <div class="container mx-auto px-6 py-16 max-w-6xl">
-      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+    <div  class="container mx-auto px-6 py-16 max-w-6xl">
+      <h2 ref="fetures" class="text-3xl md:text-4xl font-bold text-center mb-12">
         Our Powerful Features
       </h2>
 
@@ -58,7 +58,6 @@
           class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-blue-600 transition"
         >
           <div class="text-blue-500 mb-4 flex justify-center">
-            <Icon name="heroicons:chart-pie" class="h-12 w-12" />
           </div>
           <h3 class="text-xl font-semibold mb-3 text-center">
             Budget Tracking
@@ -74,7 +73,6 @@
           class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-blue-600 transition"
         >
           <div class="text-blue-500 mb-4 flex justify-center">
-            <Icon name="heroicons:chart-bar" class="h-12 w-12" />
           </div>
           <h3 class="text-xl font-semibold mb-3 text-center">
             Investment Insights
@@ -90,7 +88,6 @@
           class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-blue-600 transition"
         >
           <div class="text-blue-500 mb-4 flex justify-center">
-            <Icon name="heroicons:lock-closed" class="h-12 w-12" />
           </div>
           <h3 class="text-xl font-semibold mb-3 text-center">
             Bank-Level Security
@@ -106,13 +103,30 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from 'vue';
 
-const mobileMenuOpen = ref(false);
+const fetures = ref(null);
 
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value;
-};
+onMounted(() => {
+  const { $gsap, $ScrollTrigger } = useNuxtApp();
+
+  if ($gsap && $ScrollTrigger) {
+    $gsap.to(fetures.value, {
+      scrollTrigger: {
+        trigger: fetures.value, 
+        start: 'top 80%',
+        end: 'top 20%', 
+        scrub: true,
+      },
+      duration: 2,
+      scale: 2,
+    });
+  } else {
+    console.error('GSAP or ScrollTrigger is not properly initialized.');
+  }
+});
+
+
 </script>
 
 <style>

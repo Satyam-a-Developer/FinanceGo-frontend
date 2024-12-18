@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="fixed top-0 left-0 right-0 z-50 ">
-      <div class="container   flex ">
+      <div ref="nav"  class="container   flex ">
         <div class="wrapper flex bg-[#14213d] p-9  backdrop-blur-md" style=" border-bottom-left-radius: 100px 70px;  border-bottom-right-radius: 100px 70px;">
         
 
@@ -19,7 +19,6 @@
             to="/" 
             class="flex items-center space-x-2 text-white "
           >
-            <Icon name="heroicons:home" class="h-5 w-5" />
             <span>Home</span>
           </NuxtLink>
           
@@ -27,7 +26,6 @@
             to="/features" 
             class="flex items-center space-x-2 text-white"
           >
-            <Icon name="heroicons:chart-bar" class="h-5 w-5" />
             <span>Features</span>
           </NuxtLink>
           
@@ -35,8 +33,14 @@
             to="/pricing" 
             class="flex items-center space-x-2 text-white"
           >
-            <Icon name="heroicons:credit-card" class="h-5 w-5" />
             <span>Pricing</span>
+          </NuxtLink>
+             
+          <NuxtLink 
+            to="/Dashboard" 
+            class="flex items-center space-x-2 text-white"
+          >
+            <span>Dashboard</span>
           </NuxtLink>
           
           <NuxtLink 
@@ -104,5 +108,23 @@
 export default {
   name: 'NuxtPageWrapper',
 };
+
+import { onMounted, ref } from 'vue';
+
+const box = ref(null);
+
+onMounted(() => {
+  const { $gsap, $ScrollTrigger } = useNuxtApp();
+
+  if ($gsap) {
+    $gsap.to(nav.value, {
+      x: 300,
+      duration: 2,
+      rotation: 360,
+    });
+  } else {
+    console.error('GSAP is not properly initialized.');
+  }
+});
 </script>
 
