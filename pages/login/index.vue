@@ -1,6 +1,5 @@
-pages/login.vue
 <template>
-  <div class=" flex items-center justify-center  p-4">
+  <div class="h-screen flex items-center justify-center  p-4">
     <div class="w-full max-w-md   -2xl rounded-2xl p-8">
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-blue-600">Finance Go </h1>
@@ -73,6 +72,11 @@ pages/login.vue
 </template>
 
 <script setup>
+definePageMeta({
+  pageTransition: {
+    name: 'rotate'
+  }
+})
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 

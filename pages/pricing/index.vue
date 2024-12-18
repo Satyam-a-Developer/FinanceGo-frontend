@@ -1,5 +1,114 @@
-<template>  
-    <div> 
-        <h1>Hello From Service</h1>
+<!-- components/PricingCards.vue -->
+<template>
+  <div class="w-full py-12 bg-gray-900 flex justify-center items-center h-screen">
+    <div class="max-w-5xl mx-auto px-4 mt-10">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Choose Your Plan</h2>
+        <p class="text-gray-400">Select the perfect plan for your financial needs</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div 
+          v-for="plan in plans" 
+          :key="plan.name"
+          class="relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm"
+          :class="plan.popular ? 'border-blue-500 border-2' : 'border-gray-700'"
+        >
+          <!-- Popular Badge -->
+          <div v-if="plan.popular" class="absolute top-4 right-4">
+            <span class="bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+              Popular
+            </span>
+          </div>
+          
+          <!-- Card Header -->
+          <div class="p-6">
+            <h3 class="text-2xl font-bold">{{ plan.name }}</h3>
+            <p class="text-gray-400 mt-2">{{ plan.description }}</p>
+          </div>
+          
+          <!-- Pricing -->
+          <div class="p-6 pt-0">
+            <div class="mb-6">
+              <span class="text-4xl font-bold">{{ plan.price }}</span>
+              <span class="text-gray-400 ml-2">/month</span>
+            </div>
+            
+            <!-- Features List -->
+            <ul class="space-y-3">
+              <li 
+                v-for="feature in plan.features" 
+                :key="feature" 
+                class="flex items-center gap-3"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 text-green-500"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span class="text-gray-300">{{ feature }}</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Card Footer -->
+          <div class="p-6">
+            <NuxtLink
+              :to="plan.link"
+              class="w-full py-3 rounded-lg font-semibold transition-colors text-center block"
+              :class="plan.popular 
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-gray-700 hover:bg-gray-600 text-white'"
+            >
+              {{ plan.buttonText }}
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
     </div>
-    </template>
+  </div>
+</template>
+
+<script setup>
+const plans = [
+  {
+    name: 'Basic Plan',
+    price: '₹500',
+    description: 'Perfect for individuals starting their financial journey',
+    features: [
+      'Basic Portfolio Tracking',
+      'Monthly Financial Reports',
+      'Email Support',
+      '2 Investment Categories',
+      'Basic Analytics Dashboard'
+    ],
+    buttonText: 'Start Basic Plan',
+    link: '/signup?plan=basic',
+    popular: false
+  },
+  {
+    name: 'Premium Plan',
+    price: '₹1,000',
+    description: 'Ideal for serious investors and traders',
+    features: [
+      'Advanced Portfolio Tracking',
+      'Real-time Financial Reports',
+      'Priority 24/7 Support',
+      'Unlimited Investment Categories',
+      'Advanced Analytics & Insights',
+      'Tax Reports Generation',
+      'Multiple Portfolio Management'
+    ],
+    buttonText: 'Start Premium Plan',
+    link: '/signup?plan=premium',
+    popular: true
+  }
+];
+</script>
