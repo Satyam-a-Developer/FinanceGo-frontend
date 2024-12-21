@@ -2,7 +2,7 @@
   <div
     class="bg-dark min-h-screen text-white font-inter flex flex-col items-center"
   >
-  <div class="container mx-auto px-6 py-24 min-h-screen max-w-6xl mt-[100px]">
+  <div class="container mx-auto px-6 py-24 min-h-screen max-w-6xl mt-[100px] ml-8">
   <div class="flex flex-col md:flex-row items-center justify-between gap-16">
     <div class="flex-1 space-y-8 text-center md:text-left">
       <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">

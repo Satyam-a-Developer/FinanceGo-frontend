@@ -1,13 +1,20 @@
 <template>
   <div class="h-screen flex flex-row mt-[5rem] ml-[5rem] p-4">
+    <NuxtLink 
+          to="/bussinessForm"
+          class="block text-white hover:text-blue-500 transition nav-link"
+        >
+          Fill the form
+        </NuxtLink>
     <h1 class="text-3xl font-bold text-blue-600 inline-block mr-10">Welcome</h1>
     <div v-if="error" class="error">
-      <p>Error: {{ error }}</p>
+      <p>Error: login in to create a new account</p>
     </div>
     <div v-else>
       <h1 v-if="!username">Loading...</h1>
-      <h1 v-else class="text-[100px] font-bold"> {{ username }}</h1>
+      <h1 v-else class="text-[30px] font-bold"> {{ username }}</h1>
     </div>
+    
   </div>
 </template>
 
@@ -21,7 +28,8 @@ export default {
   },
   async mounted() {
     try {
-      // Make the API call to fetch dashboard data
+  
+    
       const response = await fetch('http://localhost:3003/dashboard', {
         method: 'GET',
         credentials: 'include',

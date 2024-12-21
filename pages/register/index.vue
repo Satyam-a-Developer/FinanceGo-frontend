@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         async register() {
-            const response = await fetch('http://localhost:3003/register', {
+            const response = await fetch('http://localhost:3003/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Make sure this header is set to 'application/json'
@@ -49,7 +49,13 @@ export default {
                     email: this.email,
                     password: this.password
                 }),
-            });
+            }).then((response) => response.json());
+
+            if (!response.ok) {
+                this.error = response.error;
+            } else {
+                this.$router.push('/login');
+            }
 
         }
     }

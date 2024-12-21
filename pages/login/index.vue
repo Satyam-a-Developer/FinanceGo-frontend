@@ -5,7 +5,7 @@
         <h1 class="text-3xl font-bold text-blue-600 inline-block">
           Finance Go
         </h1>
-        <span v-if="name" class="ml-4 text-lg text-gray-800">Welcome, {{ name }}</span>
+        <span v-if="name" class="ml-4 text-lg text-gray-800"></span>
         <p class="text-gray-500 mt-2">Manage Your Finances Smartly</p>
       </div>
 
@@ -125,9 +125,9 @@ const handleLogin = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        "name": name.value,
-        "email": email.value, 
-        "password": password.value 
+        username: name.value,
+        email: email.value, 
+        password: password.value 
       }),
       credentials: 'include' 
     })
