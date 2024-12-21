@@ -1,14 +1,33 @@
 <template>
-  <div class="h-screen flex items-center justify-center  p-4">
-    <div class="w-full max-w-md   -2xl rounded-2xl p-8">
+  <div class="h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-2xl p-8 overflow-auto">
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-blue-600">Finance Go </h1>
-        <p class="text-white-500 mt-2">Manage Your Finances Smartly</p>
+        <h1 class="text-3xl font-bold text-blue-600 inline-block">
+          Finance Go
+        </h1>
+        <span v-if="name" class="ml-4 text-lg text-gray-800">Welcome, {{ name }}</span>
+        <p class="text-gray-500 mt-2">Manage Your Finances Smartly</p>
       </div>
-      
-      <form @submit.prevent="handleLogin" class="space-y-6">
+
+      <form @submit.prevent="handleLogin" class="space-y-6 text-black">
         <div>
-          <label for="email" class="block text-sm font-medium text-white-700">
+          <label for="username" class="block text-sm font-medium text-gray-700">
+            Name
+          </label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <input
+              type="text"
+              id="username"
+              v-model="name"
+              required
+              class="pl-3 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2"
+              placeholder="Enter your name"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">
             Email Address
           </label>
           <div class="mt-1 relative rounded-md shadow-sm">
@@ -17,15 +36,14 @@
               id="email"
               v-model="email"
               required
-              class="pl-3 block w-full rounded-md border border-gray-300 
-                     focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2"
+              class="pl-3 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2"
               placeholder="you@example.com"
             />
           </div>
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-white-700">
+          <label for="password" class="block text-sm font-medium text-gray-700">
             Password
           </label>
           <div class="mt-1 relative rounded-md shadow-sm">
@@ -34,8 +52,7 @@
               id="password"
               v-model="password"
               required
-              class="pl-3 block w-full rounded-md border border-gray-300 
-                     focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2"
+              class="pl-3 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2"
               placeholder="Enter your password"
             />
           </div>
@@ -49,10 +66,7 @@
           <button
             type="submit"
             :disabled="isLoading"
-            class="w-full flex justify-center py-2 px-4 border border-transparent 
-                   rounded-md shadow-sm text-sm font-medium text-white 
-                   bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 
-                   focus:ring-offset-2 focus:ring-blue-500"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             {{ isLoading ? 'Logging in...' : 'Sign In' }}
           </button>
@@ -60,8 +74,8 @@
       </form>
 
       <div class="mt-6 text-center">
-        <p class="text-sm text-white-600">
-          Don't have an account? 
+        <p class="text-sm text-gray-600">
+          Don't have an account?
           <NuxtLink to="/register" class="font-medium text-blue-600 hover:text-blue-500">
             Register here
           </NuxtLink>
@@ -77,58 +91,73 @@ definePageMeta({
     name: 'rotate'
   }
 })
-import { ref } from 'vue'
+
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Reactive state
+const name = ref('')
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const isLoading = ref(false)
 
-// Router for navigation
 const router = useRouter()
 
-// Login handler
 const handleLogin = async () => {
-  // Reset previous error
   errorMessage.value = ''
-  
-  // Validate inputs
-  if (!email.value || !password.value) {
-    errorMessage.value = 'Please enter both email and password'
+  console.log('Attempting login with:', { 
+    name: name.value,
+    email: email.value,
+    password: password.value 
+  })
+
+  if (!name.value || !email.value || !password.value) {
+    errorMessage.value = 'Please fill in all fields'
     return
   }
 
-  // Set loading state
   isLoading.value = true
 
   try {
-    // TODO: Replace with actual authentication logic
-    // Example: 
-    // const response = await $fetch('/api/login', {
-    //   method: 'POST',
-    //   body: { email: email.value, password: password.value }
-    // })
+    const response = await fetch('http://localhost:3003/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        "name": name.value,
+        "email": email.value, 
+        "password": password.value 
+      }),
+      credentials: 'include' 
+    })
 
-    // Simulated login (replace with actual authentication)
-    if (email.value === 'user@example.com' && password.value === 'password123') {
-      // Successful login
-      // You might want to set a token or user session here
+    const data = await response.json()
+
+   if (response.ok) {
+      // If login successful, store the token
+      if (data.token) {
+      localStorage.setItem('token', data.token)
+      }
+
+ 
+
+      console.log('Login successful, navigating to dashboard')
       router.push('/dashboard')
     } else {
-      errorMessage.value = 'Invalid email or password'
+      if (Array.isArray(data)) {
+        errorMessage.value = data.map(error => error.message).join(', ')
+      } else if (data.message) {
+        errorMessage.value = data.message
+      } else {
+        errorMessage.value = 'Invalid credentials. Go to registration page and try again.'
+      }
     }
   } catch (error) {
-    // Handle login error
-    errorMessage.value = error.message || 'Login failed. Please try again.'
-  } finally {
-    // Reset loading state
-    isLoading.value = false
-  }
+    console.error('Login error:', error)
+    errorMessage.value = 'An error occurred during login. Please try again.'
+  } 
 }
-</script>
 
-<style scoped>
-/* Additional custom styles if needed */
-</style>
+
+</script>

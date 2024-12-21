@@ -1,6 +1,6 @@
 <!-- components/PricingCards.vue -->
 <template>
-  <div class="w-full py-12 bg-gray-900 flex justify-center items-center h-screen">
+  <div class="w-full py-12 bg-gray-900 flex justify-center items-center min-h-screen">
     <div class="max-w-5xl mx-auto px-4 mt-10">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-white mb-4">Choose Your Plan</h2>
@@ -8,11 +8,16 @@
       </div>
       
       <div class="grid md:grid-cols-2 gap-8">
-        <div 
-          v-for="plan in plans" 
+        <div
+          v-for="plan in plans"
           :key="plan.name"
-          class="relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm"
-          :class="plan.popular ? 'border-blue-500 border-2' : 'border-gray-700'"
+          class="relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-200 cursor-pointer"
+          :class="{
+            'border-blue-500 border-2 scale-105': selectedPlan === plan.name,
+            'border-blue-500 border': plan.popular && selectedPlan !== plan.name,
+            'border-gray-700': !plan.popular && selectedPlan !== plan.name
+          }"
+          @click="selectPlan(plan.name)"
         >
           <!-- Popular Badge -->
           <div v-if="plan.popular" class="absolute top-4 right-4">
@@ -23,22 +28,22 @@
           
           <!-- Card Header -->
           <div class="p-6">
-            <h3 class="text-2xl font-bold">{{ plan.name }}</h3>
+            <h3 class="text-2xl font-bold text-white">{{ plan.name }}</h3>
             <p class="text-gray-400 mt-2">{{ plan.description }}</p>
           </div>
           
           <!-- Pricing -->
           <div class="p-6 pt-0">
             <div class="mb-6">
-              <span class="text-4xl font-bold">{{ plan.price }}</span>
+              <span class="text-4xl font-bold text-white">{{ plan.price }}</span>
               <span class="text-gray-400 ml-2">/month</span>
             </div>
             
             <!-- Features List -->
             <ul class="space-y-3">
-              <li 
-                v-for="feature in plan.features" 
-                :key="feature" 
+              <li
+                v-for="feature in plan.features"
+                :key="feature"
                 class="flex items-center gap-3"
               >
                 <svg
@@ -63,7 +68,7 @@
             <NuxtLink
               :to="plan.link"
               class="w-full py-3 rounded-lg font-semibold transition-colors text-center block"
-              :class="plan.popular 
+              :class="plan.popular
                 ? 'bg-blue-600 hover:bg-blue-700 text-white'
                 : 'bg-gray-700 hover:bg-gray-600 text-white'"
             >
@@ -77,6 +82,12 @@
 </template>
 
 <script setup>
+const selectedPlan = ref(null);
+
+const selectPlan = (planName) => {
+  selectedPlan.value = planName;
+};
+
 const plans = [
   {
     name: 'Basic Plan',

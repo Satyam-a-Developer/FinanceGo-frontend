@@ -1,35 +1,48 @@
 <template>
-  <div class="space-y-10">
-    <div class="h-screen flex justify-center items-center">
-      <h1 class="text-4xl font-bold">Scroll Down to Animate</h1>
+  <div class="h-screen flex flex-row mt-[5rem] ml-[5rem] p-4">
+    <h1 class="text-3xl font-bold text-blue-600 inline-block mr-10">Welcome</h1>
+    <div v-if="error" class="error">
+      <p>Error: {{ error }}</p>
     </div>
-    <div ref="box" class="h-20 w-20 bg-blue-500 mx-auto"></div>
-    <div class="h-screen"></div>
+    <div v-else>
+      <h1 v-if="!username">Loading...</h1>
+      <h1 v-else class="text-[100px] font-bold"> {{ username }}</h1>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { onMounted, ref } from 'vue';
+<script>
+export default {
+  data() {
+    return {
+      username: '', // To store the username
+      error: '', // To store error messages
+    };
+  },
+  async mounted() {
+    try {
+      // Make the API call to fetch dashboard data
+      const response = await fetch('http://localhost:3003/dashboard', {
+        method: 'GET',
+        credentials: 'include',
+      });
 
-const box = ref(null);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch dashboard data');
+      }
 
-onMounted(() => {
-  const { $gsap, $ScrollTrigger } = useNuxtApp();
-
-  if ($gsap && $ScrollTrigger) {
-    $gsap.to(box.value, {
-      scrollTrigger: {
-        trigger: box.value, 
-        start: 'top 80%',
-        end: 'top 20%', 
-        scrub: true, 
-      },
-      x: 300,
-      rotation: 360,
-      duration: 2,
-    });
-  } else {
-    console.error('GSAP or ScrollTrigger is not properly initialized.');
-  }
-});
+      const data = await response.json();
+      this.username = data.user.username;
+    } catch (err) {
+      this.error = err.message;
+    }
+  },
+};
 </script>
+
+<style>
+.error {
+  color: red;
+}
+</style>
