@@ -128,13 +128,11 @@
     "actualIncome": String(formData.value.actualIncome), // Convert to string
     "reason": formData.value.reason, // Ensure this field is properly populated
     "category": formData.value.category
-  })
+  }),
+  credentials: 'include' 
 });
 
-    console.log('Form submitted:', {
-      ...formData.value,
-      totalLoss: calculateLoss.value
-    });
+  
     
     // Show success message
     showSuccess.value = true;

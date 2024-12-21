@@ -75,7 +75,7 @@
 
           <div class="md:hidden ml-auto">
             <button @click="toggleMobileMenu" class="text-white focus:outline-none">
-              <Icon :name="mobileMenuOpen ? 'heroicons:x-mark' : 'heroicons:bars-3'" class="h-6 w-6" />
+              🙂
             </button>
           </div>
         </div>
@@ -126,9 +126,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-const cookie = useCookie('token')
-const value = cookie.value
-console.log("valev" , value)
 const isDashboard = ref(false);
 const mobileMenuOpen = ref(false);
 const isLoggedIn = ref(false); // Tracks if the user is logged in
