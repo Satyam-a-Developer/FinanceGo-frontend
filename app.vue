@@ -56,7 +56,6 @@
               to="/Dashboard" 
               class="flex items-center space-x-2 text-white relative nav-link"
               :class="{ 'active-link': route.path === '/Dashboard' }"
-              @click="toggleDashboard"
             >
               <span>Dashboard</span>
             </NuxtLink>
@@ -95,7 +94,7 @@
         <NuxtLink 
           to="/features" 
           class="block text-white hover:text-blue-500 transition nav-link"
-          :class="{ 'text-blue-500': route.path === '/features' }"
+          :class="{ 'text-blue-500': route.path === '/service' }"
         >
           Features
         </NuxtLink>
@@ -124,7 +123,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 const isDashboard = ref(false);
 const mobileMenuOpen = ref(false);
@@ -134,22 +133,6 @@ const route = useRoute();
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
-};
-
-const toggleDashboard = () => {
-  isDashboard.value = true;
-};
-
-// Check if a cookie exists
-const getCookie = (name) => {
-  const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
-    const [key, value] = cookie.trim().split('=');
-    if (key === name) {
-      return value;
-    }
-  }
-  return null;
 };
 
 // Initialize login state on mount
@@ -169,10 +152,17 @@ onMounted(() => {
   isLoggedIn.value = !!authToken; // If token exists, set `isLoggedIn` to true
 });
 
-// Watch route changes to update dashboard state
-watch(() => route.path, (newPath) => {
-  isDashboard.value = newPath.includes('Dashboard');
-});
+// Check if a cookie exists
+const getCookie = (name) => {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [key, value] = cookie.trim().split('=');
+    if (key === name) {
+      return value;
+    }
+  }
+  return null;
+};
 </script>
 
 <style scoped>
@@ -199,8 +189,19 @@ watch(() => route.path, (newPath) => {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #3b82f6;
+  background-color: #3b82f6; /* Blue underline */
   transition: width 0.3s ease;
+}
+
+/* Hover animation for the link */
+.nav-link:hover {
+  color: #3b82f6; /* Change text color on hover */
+  transform: translateY(-2px); /* Subtle upward movement */
+}
+
+/* Hover effect for the underline */
+.nav-link:hover::after {
+  width: 100%; /* Expand the underline on hover */
 }
 
 .active-link {
