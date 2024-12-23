@@ -1,23 +1,26 @@
-<!-- components/PricingCards.vue -->
+\<!-- components/PricingCards.vue -->
 <template>
   <div class="w-full py-12 bg-gray-900 flex justify-center items-center min-h-screen">
     <div class="max-w-5xl mx-auto px-4 mt-10">
-      <div class="text-center mb-12">
+      <div class="text-center mb-12 opacity-0" ref="headerRef">
         <h2 class="text-3xl font-bold text-white mb-4">Choose Your Plan</h2>
         <p class="text-gray-400">Select the perfect plan for your financial needs</p>
       </div>
       
       <div class="grid md:grid-cols-2 gap-8">
         <div
-          v-for="plan in plans"
+          v-for="(plan, index) in plans"
           :key="plan.name"
-          class="relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-200 cursor-pointer"
+          :ref="el => cardRefs[index] = el"
+          class="relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-200 cursor-pointer opacity-0"
           :class="{
             'border-blue-500 border-2 scale-105': selectedPlan === plan.name,
             'border-blue-500 border': plan.popular && selectedPlan !== plan.name,
             'border-gray-700': !plan.popular && selectedPlan !== plan.name
           }"
           @click="selectPlan(plan.name)"
+          @mouseenter="onCardHover(index)"
+          @mouseleave="onCardLeave(index)"
         >
           <!-- Popular Badge -->
           <div v-if="plan.popular" class="absolute top-4 right-4">
@@ -42,9 +45,10 @@
             <!-- Features List -->
             <ul class="space-y-3">
               <li
-                v-for="feature in plan.features"
+                v-for="(feature, featureIndex) in plan.features"
                 :key="feature"
-                class="flex items-center gap-3"
+                :ref="el => featureRefs[`${index}-${featureIndex}`] = el"
+                class="flex items-center gap-3 opacity-0"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -82,11 +86,78 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import gsap from 'gsap';
+
 const selectedPlan = ref(null);
+const headerRef = ref(null);
+const cardRefs = ref([]);
+const featureRefs = ref({});
 
 const selectPlan = (planName) => {
   selectedPlan.value = planName;
+  
+  // Animate scale effect on selection
+  cardRefs.value.forEach((card, index) => {
+    gsap.to(card, {
+      scale: selectedPlan.value === plans[index].name ? 1.05 : 1,
+      duration: 0.3,
+      ease: 'power2.out'
+    });
+  });
 };
+
+const onCardHover = (index) => {
+  if (selectedPlan.value === plans[index].name) return;
+  
+  gsap.to(cardRefs.value[index], {
+    y: -10,
+    duration: 0.3,
+    ease: 'power2.out'
+  });
+};
+
+const onCardLeave = (index) => {
+  if (selectedPlan.value === plans[index].name) return;
+  
+  gsap.to(cardRefs.value[index], {
+    y: 0,
+    duration: 0.3,
+    ease: 'power2.out'
+  });
+};
+
+onMounted(() => {
+  // Animate header
+  gsap.to(headerRef.value, {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    ease: 'power2.out'
+  });
+
+  // Animate cards
+  cardRefs.value.forEach((card, index) => {
+    gsap.to(card, {
+      opacity: 1,
+      x: 0,
+      duration: 0.8,
+      delay: 0.2 + index * 0.2,
+      ease: 'power2.out'
+    });
+  });
+
+  // Animate features
+  Object.entries(featureRefs.value).forEach(([key, element], index) => {
+    gsap.to(element, {
+      opacity: 1,
+      x: 0,
+      duration: 0.5,
+      delay: 0.8 + index * 0.1,
+      ease: 'power2.out'
+    });
+  });
+});
 
 const plans = [
   {
