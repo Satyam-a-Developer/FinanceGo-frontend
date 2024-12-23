@@ -1,3 +1,4 @@
+// components/Dashboard.vue
 <template>
   <div class="min-h-screen flex flex-col p-8 mt-12 w-[100vw]" ref="mainContainer">
     <!-- Loading State -->
@@ -9,7 +10,8 @@
 
     <template v-else>
       <!-- Navigation and Header Section -->
-      <div ref="header" class="flex flex-col items-start gap-4 mb-8 text-[3rem] z-10 shadow-md p-4 rounded-lg backdrop-blur opacity-0">
+      <div ref="header"
+        class="flex flex-col items-start gap-4 mb-8 text-[3rem] z-10 shadow-md p-4 rounded-lg backdrop-blur opacity-0">
         <h1 class="font-bold text-blue-600">
           Welcome, <span class="text-gray-700">{{ username }}</span>
         </h1>
@@ -21,7 +23,8 @@
       <!-- Content Section -->
       <div class="flex-grow mt-4">
         <!-- Error State -->
-        <div v-if="error" ref="errorMessage" class="p-4 bg-red-50 border border-red-400 text-red-600 rounded-md shadow-md opacity-0">
+        <div v-if="error" ref="errorMessage"
+          class="p-4 bg-red-50 border border-red-400 text-red-600 rounded-md shadow-md opacity-0">
           <p>Error: {{ error }}</p>
         </div>
 
@@ -29,45 +32,32 @@
         <div v-else class="space-y-6">
           <!-- Business Details -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-            <div
-              v-for="(box, index) in boxes"
-              :key="index"
-              :ref="el => boxRefs[index] = el"
-              :class="box.class"
+            <div v-for="(box, index) in boxes" :key="index" :ref="el => boxRefs[index] = el" :class="box.class"
               class="gradient-box text-white rounded-lg p-6 shadow-lg transition-transform transform opacity-0">
               <h3 class="text-lg font-semibold">{{ box.title }}</h3>
               <p class="mt-2">{{ messagedata[box.dataKey] }}</p>
             </div>
           </div>
-          
+
           <!-- Chart Section -->
           <div ref="chartContainer" class="opacity-0">
             <line-chart :data="chartData" :options="chartOptions" />
           </div>
-          
+
           <!-- AI Section -->
-          <div
-            ref="aiSection"
+          <div ref="aiSection"
             class="gradient-box bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 rounded-lg p-6 shadow-lg transition-transform transform opacity-0">
             <h3 class="text-[3rem] font-semibold text-cyan-100">Ask AI for a prediction</h3>
             <div class="flex flex-col gap-4">
-              <input 
-                v-model="aiQuery"
-                type="text" 
+              <input v-model="aiQuery" type="text"
                 class="mt-4 w-full p-3 rounded-md text-black border-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Type your question here..." 
-                @focus="onInputFocus"
-                @blur="onInputBlur"
-                @keyup.enter="getAIPrediction"
-                ref="aiInput"
-              />
-              <button 
-                @click="getAIPrediction"
-                :disabled="isLoadingAI"
+                placeholder="Type your question here..." @focus="onInputFocus" @blur="onInputBlur"
+                @keyup.enter="getAIPrediction" ref="aiInput" />
+              <button @click="getAIPrediction" :disabled="isLoadingAI"
                 class="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-blue-50 transition-colors duration-200 disabled:opacity-50">
                 {{ isLoadingAI ? 'Getting prediction...' : 'Get Prediction' }}
               </button>
-              
+
               <!-- AI Response Section -->
               <div v-if="aiResponse" class="mt-4 bg-white bg-opacity-90 text-gray-800 p-4 rounded-md">
                 <p class="font-medium">AI Prediction:</p>
@@ -89,7 +79,7 @@ import gsap from 'gsap';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
-const GROQ_API_KEY =  process.env.GROQ_API_KEY;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 export default {
   name: 'GradientBoxes',
@@ -312,7 +302,7 @@ export default {
       await this.fetchUserData();
       await this.fetchBusinessData();
       this.isLoading = false;
-      
+
       this.$nextTick(() => {
         setTimeout(() => {
           this.initializeAnimations();
@@ -321,7 +311,7 @@ export default {
     } catch (err) {
       this.error = err.message || "An unexpected error occurred";
       this.isLoading = false;
-      
+
       if (this.errorMessage) {
         gsap.to(this.errorMessage, {
           opacity: 1,
