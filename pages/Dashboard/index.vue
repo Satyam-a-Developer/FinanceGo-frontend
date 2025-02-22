@@ -35,7 +35,7 @@
                   ref="errorMessage"
                   class="p-4 bg-red-50 border border-red-400 text-red-600 rounded-md shadow-md opacity-0"
               >
-                  <p>Error: not data-base is here </p>
+                  <p>Error: no data-base is here </p>
               </div>
 
               <!-- Content State -->
