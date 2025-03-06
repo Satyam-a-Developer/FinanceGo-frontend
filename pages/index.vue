@@ -139,10 +139,10 @@
                         class="absolute inset-0 pointer-events-none"
                     >
                         <div
-                            class="absolute top-0 right-0 w-20 h-20 bg-blue-500/20 rounded-full blur-xl"
+                            class="absolute top-0 right-0 w-96 h-20 bg-blue-500/20 rounded-full blur-xl"
                         ></div>
                         <div
-                            class="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/20 rounded-full blur-xl"
+                            class="absolute bottom-0 left-0 w-96 h-32 bg-purple-500/20 rounded-full blur-xl"
                         ></div>
                     </div>
                 </div>
